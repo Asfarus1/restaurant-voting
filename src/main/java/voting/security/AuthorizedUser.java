@@ -8,10 +8,10 @@ import java.util.Collection;
 
 public class AuthorizedUser extends User {
     @Getter
-    private final Long userId;
+    private final Long id;
 
-    public AuthorizedUser(Long userId, String username, String password, boolean enabled, Collection<? extends GrantedAuthority> authorities) {
+    public AuthorizedUser(Long id, String username, String password, boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, enabled, enabled, enabled, authorities);
-        this.userId = userId;
+        this.id = id;
     }
 }

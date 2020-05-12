@@ -16,6 +16,6 @@ public class SecurityUtil {
 
     @Nullable
     public static Long getUserId() {
-        return getUser().map(AuthorizedUser::getUserId).orElse(null);
+        return getUser().map(AuthorizedUser::getId).orElse(null);
     }
 }

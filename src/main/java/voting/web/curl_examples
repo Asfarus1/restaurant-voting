@@ -1,0 +1,13 @@
+{
+  "date": "2020-05-12",
+    "items": [
+      {
+        "price": 99,
+       "dish":"http://localhost:8080/menuItems/57/dish"
+         },
+ {
+  "price": 88,
+    "dish":"http://localhost:8080/menuItems/56/dish"
+    }
+  ]
+}

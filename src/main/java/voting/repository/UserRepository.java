@@ -1,10 +1,15 @@
 package voting.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RestResource;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import voting.domain.User;
 
 import java.util.Optional;
 
+//@PreAuthorize("hasRole('ADMIN')")
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+
+    @RestResource(path="username", rel = "Search by username contains substring")
+    Optional<User> findByUsername(String substring);
 }

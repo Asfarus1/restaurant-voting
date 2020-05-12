@@ -6,7 +6,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 import voting.domain.User;
 import voting.web.AccountController;
-import voting.web.LunchController;
+import voting.web.HaveLunchController;
 
 @Component
 public class AccountAssembler implements RepresentationModelAssembler<User, EntityModel<User>> {
@@ -15,7 +15,7 @@ public class AccountAssembler implements RepresentationModelAssembler<User, Enti
     public EntityModel<User> toModel(User user) {
         EntityModel<User> model = new EntityModel<>(user);
         model.add(WebMvcLinkBuilder.linkTo(AccountController.class).withSelfRel(),
-                WebMvcLinkBuilder.linkTo(LunchController.class).withRel("lunch history"));
+                WebMvcLinkBuilder.linkTo(HaveLunchController.class).withRel("lunch history"));
         return model;
     }
 }

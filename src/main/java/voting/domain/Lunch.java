@@ -11,8 +11,10 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @NoArgsConstructor
-@Table(name = "lunches")
-public class Lunch extends BaseEntity{
+@AllArgsConstructor
+@Table(name = "lunches", uniqueConstraints =
+@UniqueConstraint(columnNames = {"date", "user_id"}))
+public class Lunch extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false, updatable = false)
@@ -24,11 +26,5 @@ public class Lunch extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JsonIgnore
     private Restaurant restaurant;
-
-    public Lunch(User user, LocalDate date) {
-        this.user = user;
-        this.date = date;
-    }
 }
