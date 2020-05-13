@@ -1,6 +1,6 @@
 INSERT INTO users (username, password)
-VALUES ('admin', '{noop}admin_pass'),
-       ('user', '{noop}user_pass');
+VALUES ('admin', '{noop}a'),
+       ('user', '{noop}u');
 
 INSERT INTO user_roles (user_id, role)
 VALUES (1, 'ADMIN'),
@@ -121,7 +121,7 @@ VALUES (45, 3, 40),
        (56, 9, 76),
        (56, 11, 9);
 
-INSERT INTO lunches(date,user_id,restaurant_id)
+INSERT INTO lunches(date, user_id, restaurant_id)
 VALUES ('2020-05-05', 2, 42),
        ('2020-05-06', 2, 42),
        ('2020-05-07', 2, 44),

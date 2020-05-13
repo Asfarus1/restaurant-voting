@@ -3,7 +3,6 @@ package voting.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +11,7 @@ import java.util.List;
 @Entity(name = "restaurants")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"lunches", "menus"})
 public class Restaurant extends BaseEntity {
 
     @NotEmpty

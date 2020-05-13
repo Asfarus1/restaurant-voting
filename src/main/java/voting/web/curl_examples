@@ -1,13 +1,14 @@
 {
   "date": "2020-05-12",
+  "restaurant":"http://localhost:8080/restaurants/42",
     "items": [
       {
         "price": 99,
-       "dish":"http://localhost:8080/menuItems/57/dish"
+       "dish":"http://localhost:8080/dish/57"
          },
  {
   "price": 88,
-    "dish":"http://localhost:8080/menuItems/56/dish"
+    "dish":"http://localhost:8080/dish/56"
     }
   ]
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "menu")
 @Table(name = "menu_items",
         uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_id"}))
 public class MenuItem extends BaseEntity {
@@ -25,6 +25,7 @@ public class MenuItem extends BaseEntity {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
+    //nullable=true for cascade save
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 }

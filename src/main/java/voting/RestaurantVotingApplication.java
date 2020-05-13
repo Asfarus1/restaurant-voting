@@ -18,8 +18,8 @@ public class RestaurantVotingApplication {
 
     @Bean
     @Scope("prototype")
-    LocalDateTime now(){
-        return LocalDateTime.of(LocalDate.now(), LocalTime.of(10,0,0));
+    LocalDateTime now() {
+        return LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0));
 //        return LocalDateTime.now();
     }
 }

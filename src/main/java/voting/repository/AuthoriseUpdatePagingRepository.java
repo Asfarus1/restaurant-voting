@@ -2,8 +2,9 @@ package voting.repository;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import voting.domain.BaseEntity;
+
+//import org.springframework.security.access.prepost.PreAuthorize;
 
 @NoRepositoryBean
 public interface AuthoriseUpdatePagingRepository<T extends BaseEntity> extends PagingAndSortingRepository<T, Long> {

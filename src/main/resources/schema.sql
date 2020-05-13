@@ -42,9 +42,9 @@ CREATE TABLE restaurants
 
 CREATE TABLE menu
 (
-    id            BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
-    date          DATE           NOT NULL,
-    restaurant_id BIGINT         NOT NULL,
+    id            BIGINT NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    date          DATE   NOT NULL,
+    restaurant_id BIGINT NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (date, restaurant_id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
@@ -52,10 +52,10 @@ CREATE TABLE menu
 
 CREATE TABLE menu_items
 (
-    id            BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
-    menu_id       BIGINT         NOT NULL,
-    dish_id       BIGINT         NOT NULL,
-    price         decimal(19, 2) NOT NULL,
+    id      BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    menu_id BIGINT         /*NOT NULL*/,
+    dish_id BIGINT         NOT NULL,
+    price   decimal(19, 2) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (menu_id, dish_id),
     FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE,
@@ -64,7 +64,7 @@ CREATE TABLE menu_items
 
 CREATE TABLE lunches
 (
-    id            BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    id            BIGINT NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
     date          date   NOT NULL,
     user_id       BIGINT NOT NULL,
     restaurant_id BIGINT NOT NULL,

@@ -1,19 +1,25 @@
 package voting.web;
 
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import voting.domain.Menu;
-
-import javax.validation.Valid;
+import voting.repository.MenuRepository;
+import voting.repository.RestaurantRepository;
 
 @RepositoryRestController
 public class MenuController {
+    private final RestaurantRepository restaurantRepository;
+    private final MenuRepository menuRepository;
 
-//    @PostMapping("/restaurants/{restaurantId}/menus/")
-//    public ResponseEntity<?> updateMenu(@PathVariable Long restaurantId, @Valid Menu menu){
-//
+    public MenuController(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+        this.restaurantRepository = restaurantRepository;
+        this.menuRepository = menuRepository;
+    }
+
+//    @PostMapping(value = "/restaurants/{restaurantId}/update-menu/", consumes = "application/json")
+//    public ResponseEntity<?> updateMenu(@PathVariable Long restaurantId, @RequestBody EntityModel<Menu> menu1){
+//        System.out.println("restaurantId='" + restaurantId + "'");
+//        Menu menu = menu1.getContent();
+//        System.out.println("menu='" + menu + "'");
+//        menu.setRestaurant(restaurantRepository.findById(restaurantId).orElseThrow(()->new IllegalArgumentException("restaurantId")));
+//        return ResponseEntity.accepted().body(menuRepository.update(menu));
 //    }
 }
