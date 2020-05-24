@@ -53,7 +53,7 @@ CREATE TABLE menu
 CREATE TABLE menu_items
 (
     id      BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
-    menu_id BIGINT         /*NOT NULL*/,
+    menu_id BIGINT         NOT NULL,
     dish_id BIGINT         NOT NULL,
     price   decimal(19, 2) NOT NULL,
     PRIMARY KEY (id),
@@ -72,4 +72,13 @@ CREATE TABLE lunches
     UNIQUE (date, user_id),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
+);
+
+CREATE TABLE refresh_tokens
+(
+    user_id BIGINT      NOT NULL,
+    token   VARCHAR(36) NOT NULL,
+    expired date        NOT NULL,
+    UNIQUE (user_id, token),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

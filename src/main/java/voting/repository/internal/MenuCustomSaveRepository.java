@@ -1,4 +1,4 @@
-package voting.repository;
+package voting.repository.internal;
 
 import voting.domain.Menu;
 

@@ -21,8 +21,8 @@ public class AuthService implements UserDetailsService {
         return repository.findByUsername(username).map(this::toPrincipal).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    private AuthorizedUser toPrincipal(User user) {
-        return new AuthorizedUser(user.getId(), user.getUsername(),
+    private AuthUser toPrincipal(User user) {
+        return new AuthUser(user.getId(), user.getUsername(),
                 user.getPassword(), user.isEnabled(), user.getRoles());
     }
 }

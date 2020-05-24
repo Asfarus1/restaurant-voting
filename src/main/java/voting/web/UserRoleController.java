@@ -2,36 +2,32 @@ package voting.web;
 
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 import voting.repository.LunchRepository;
-import voting.repository.RestaurantRepository;
-import voting.repository.UserRepository;
-import voting.web.accessors.LunchAssembler;
+import voting.security.SecurityUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.ResponseEntity.accepted;
 
-@RepositoryRestController
-public abstract class HaveLunchController {
+@Controller
+public abstract class UserRoleController {
     private final LunchRepository repository;
-    private final RestaurantRepository restaurantRepository;
-    private final UserRepository userRepository;
-    private final LunchAssembler assembler;
 
-    public HaveLunchController(LunchRepository repository, RestaurantRepository restaurantRepository, UserRepository userRepository, LunchAssembler assembler) {
+    protected UserRoleController(LunchRepository repository) {
         this.repository = repository;
-        this.restaurantRepository = restaurantRepository;
-        this.userRepository = userRepository;
-        this.assembler = assembler;
     }
 
-    @PutMapping(value = "restaurants/{restaurantId}/have-lunch", consumes = "application/json")
+    @PutMapping(value = "/restaurants/{restaurantId}/have-lunch", consumes = "application/json")
     public ResponseEntity<?> haveLunch(/*@AuthenticationPrincipal org.springframework.security.core.userdetails.User authPrincipal, */@PathVariable Long restaurantId) {
         Long userId = SecurityUtil.getUserId();
         System.out.println("have-lunch:" + userId);
@@ -44,12 +40,15 @@ public abstract class HaveLunchController {
         repository.haveLunchIn(restaurantId, date, userId);
         return accepted().build();
     }
-//
-//    @PostMapping("/accont")
-//    public ResponseEntity<?> getLunchHistory(Pageable pageable, PagedResourcesAssembler<Lunch> pagedResourcesAssembler) {
-//        Page<Lunch> page = repository.findAll(pageable);
-//        return ResponseEntity.ok().body(pagedResourcesAssembler.toModel(page, assembler));
-//    }
+
+    @GetMapping("/self")
+    public String getLunchHistory(HttpServletRequest request) {
+        String s = request.getRequestURI();
+        System.out.println("===========" + s);
+        String red = "forward:" + s.replaceAll("/self[/]?", "/users/" + SecurityUtil.getUserId());
+        System.out.println(red);
+        return red;
+    }
 
     @Lookup
     protected abstract LocalDateTime now();

@@ -1,4 +1,4 @@
-package voting.repository;
+package voting.repository.internal;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;

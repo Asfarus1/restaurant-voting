@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,16 +20,20 @@ import java.util.Set;
 @NoArgsConstructor
 public class User extends BaseEntity {
     private String username;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean enabled;
+
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
     @OneToMany
     @JoinColumn(name = "user_id")
     @JsonIgnore

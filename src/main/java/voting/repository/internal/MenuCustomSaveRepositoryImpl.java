@@ -1,4 +1,4 @@
-package voting.repository;
+package voting.repository.internal;
 
 import org.springframework.dao.support.DataAccessUtils;
 import voting.domain.Menu;
@@ -20,10 +20,13 @@ public class MenuCustomSaveRepositoryImpl implements MenuCustomSaveRepository {
         Menu origin = DataAccessUtils.singleResult(query.getResultList());
         if (origin == null) {
             em.persist(menu);
-            return menu;
         } else {
             origin.setItems(menu.getItems());
-            return (S) em.merge(origin);
+            menu = (S) em.merge(origin);
+            em.createNamedQuery(Menu.REMOVE_ITEMS).setParameter(1,origin.getId()).executeUpdate();
         }
+        S finalMenu = menu;
+        menu.getItems().stream().peek(i->i.setMenu(finalMenu)).forEach(em::persist);
+        return menu;
     }
 }
