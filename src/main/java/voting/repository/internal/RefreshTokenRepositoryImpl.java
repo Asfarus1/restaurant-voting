@@ -27,6 +27,6 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     @Override
     public void add(Long userId, String token, Date expired) {
-        template.update("INSERT INTO refresh_tokens VALUES (?1,?2,?3)",userId, token, expired);
+        template.update("INSERT INTO refresh_tokens VALUES (?1,?2,?3)", userId, token, expired);
     }
 }

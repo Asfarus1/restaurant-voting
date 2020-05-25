@@ -23,10 +23,10 @@ public class MenuCustomSaveRepositoryImpl implements MenuCustomSaveRepository {
         } else {
             origin.setItems(menu.getItems());
             menu = (S) em.merge(origin);
-            em.createNamedQuery(Menu.REMOVE_ITEMS).setParameter(1,origin.getId()).executeUpdate();
+            em.createNamedQuery(Menu.REMOVE_ITEMS).setParameter(1, origin.getId()).executeUpdate();
         }
         S finalMenu = menu;
-        menu.getItems().stream().peek(i->i.setMenu(finalMenu)).forEach(em::persist);
+        menu.getItems().stream().peek(i -> i.setMenu(finalMenu)).forEach(em::persist);
         return menu;
     }
 }

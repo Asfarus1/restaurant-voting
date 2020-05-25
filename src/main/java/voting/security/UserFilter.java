@@ -1,10 +1,9 @@
 package voting.security;
 
-import org.springframework.security.access.AuthorizationServiceException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import voting.domain.Role;
-import voting.web.exceptions.NotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,12 +17,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class UserFilter extends GenericFilterBean {
     private static final Pattern USER_ID_PATTERN = Pattern.compile("(?<=/users/)\\d+");
+    private final SecurityUtilBean securityUtilBean;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!SecurityUtil.hasRole(Role.ADMIN)) {
+        if (!securityUtilBean.hasRole(Role.ADMIN)) {
             String url = ((HttpServletRequest) request).getRequestURL().toString();
             Optional<Long> requestedUserId = Optional.of(USER_ID_PATTERN.matcher(url))
                     .filter(Matcher::find)
@@ -31,12 +32,12 @@ public class UserFilter extends GenericFilterBean {
                     .map(Long::parseLong);
             if (requestedUserId.isPresent()) {
                 Long userId = requestedUserId.get();
-                if (!userId.equals(SecurityUtil.getUserId())) {
-                    ((HttpServletResponse)response).sendError(HttpServletResponse.SC_NOT_FOUND);
+                if (!userId.equals(securityUtilBean.getUserId())) {
+                    ((HttpServletResponse) response).sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
             } else if (url.contains("/lunches/")) {
-                ((HttpServletResponse)response).sendError(HttpServletResponse.SC_FORBIDDEN);
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
         }

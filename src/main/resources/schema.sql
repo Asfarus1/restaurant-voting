@@ -1,8 +1,10 @@
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS lunches;
+DROP TABLE IF EXISTS refresh_tokens;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS menu_items;
 DROP TABLE IF EXISTS menu;
 DROP TABLE IF EXISTS restaurants;
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS dishes;
 
 DROP SEQUENCE IF EXISTS hibernate_sequence;
@@ -78,7 +80,7 @@ CREATE TABLE refresh_tokens
 (
     user_id BIGINT      NOT NULL,
     token   VARCHAR(36) NOT NULL,
-    expired date        NOT NULL,
+    expired timestamp   NOT NULL,
     UNIQUE (user_id, token),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

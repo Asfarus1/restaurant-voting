@@ -2,21 +2,22 @@ package voting.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import voting.domain.Role;
 
 import java.util.Optional;
 
-public final class SecurityUtil {
+@Component
+public final class SecurityUtilBean {
 
-    private SecurityUtil() {
-    }
-
-    public static Optional<AuthUser> getUser() {
+    public Optional<AuthUser> getUser() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(Authentication::getPrincipal).map(AuthUser.class::cast);
+                .map(Authentication::getPrincipal)
+                .filter(AuthUser.class::isInstance)
+                .map(AuthUser.class::cast);
     }
 
-    public static boolean hasRole(Role role){
+    public boolean hasRole(Role role) {
         return getUser()
                 .map(AuthUser::getAuthorities)
                 .filter(roles -> roles.contains(role))
@@ -27,7 +28,7 @@ public final class SecurityUtil {
      * @return authorized user id
      * @throws TokenAuthenticationException if user is not authorized
      */
-    public static Long getUserId() {
+    public Long getUserId() {
         return getUser().map(AuthUser::getId)
                 .orElseThrow(() -> new TokenAuthenticationException("Not authorized"));
     }

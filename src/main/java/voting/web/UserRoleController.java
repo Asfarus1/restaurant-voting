@@ -1,17 +1,15 @@
 package voting.web;
 
 import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
 import voting.repository.LunchRepository;
-import voting.security.SecurityUtil;
+import voting.security.SecurityUtilBean;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -27,9 +25,10 @@ public abstract class UserRoleController {
         this.repository = repository;
     }
 
+    @PreAuthorize("hasRole('USER)')")
     @PutMapping(value = "/restaurants/{restaurantId}/have-lunch", consumes = "application/json")
-    public ResponseEntity<?> haveLunch(/*@AuthenticationPrincipal org.springframework.security.core.userdetails.User authPrincipal, */@PathVariable Long restaurantId) {
-        Long userId = SecurityUtil.getUserId();
+    public ResponseEntity<?> haveLunch(@PathVariable Long restaurantId) {
+        Long userId = SecurityUtilBean.getUserId();
         System.out.println("have-lunch:" + userId);
         LocalDateTime now = now();
         if (now.getHour() > 10) {
@@ -41,13 +40,12 @@ public abstract class UserRoleController {
         return accepted().build();
     }
 
-    @GetMapping("/self")
-    public String getLunchHistory(HttpServletRequest request) {
-        String s = request.getRequestURI();
-        System.out.println("===========" + s);
-        String red = "forward:" + s.replaceAll("/self[/]?", "/users/" + SecurityUtil.getUserId());
-        System.out.println(red);
-        return red;
+    @PreAuthorize("hasRole('USER)')")
+    @GetMapping("/account")
+    public String forwardCurrentUser(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return "forward:" +
+                uri.replaceAll("/account[/]?", "/users/" + SecurityUtilBean.getUserId());
     }
 
     @Lookup
