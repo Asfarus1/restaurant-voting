@@ -25,7 +25,6 @@ public class MenuItem extends BaseEntity {
     private BigDecimal price;
 
     @ManyToOne
-    //nullable=true for cascade save
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 }

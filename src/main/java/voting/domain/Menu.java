@@ -1,5 +1,6 @@
 package voting.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,7 +25,7 @@ import java.util.List;
         //For most popular operation create
         // with CascadeType.PERSIST calls insert and update queries,
         @NamedQuery(name = Menu.REMOVE_ITEMS,
-                query = "DELETE FROM MenuItem i WHERE i.menu=?1")})
+                query = "DELETE FROM MenuItem i WHERE i.menu.id=?1")})
 @NamedEntityGraph(name = Menu.WITH_ITEMS,
         attributeNodes = @NamedAttributeNode("items"),
         subgraphs = @NamedSubgraph(name = "items", attributeNodes = @NamedAttributeNode("dish")))
@@ -37,14 +38,13 @@ public class Menu extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     @NotEmpty
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
     @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
-    @JoinColumn(name = "menu_id")
     private List<MenuItem> items;
 }

@@ -32,6 +32,7 @@ public class AuthController {
     private final UserRepository repository;
     private final JwtTokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final SecurityUtilBean securityUtilBean;
 
     @Value("${refresh-token.duration-millis}")
     private long refreshTokenDurationMs;
@@ -39,17 +40,16 @@ public class AuthController {
     @Value("${jwt.token.duration-millis}")
     private long accessTokenDurationMs;
 
-    //authorized
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/create_token")
     public TokenResponse getAccessToken(HttpServletRequest request) {
-        AuthUser user = SecurityUtilBean.getUser().orElseThrow(() -> new BadCredentialsException("Unauthorized"));
+        AuthUser user = securityUtilBean.getUser().orElseThrow(() -> new BadCredentialsException("Unauthorized"));
         TokenResponse tokenResponse = getTokenResponse(user.getUsername());
         refreshTokenRepository.add(user.getId(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshExpired());
         return tokenResponse;
     }
 
-    //unauthorized
+    @PreAuthorize("permitAll()")
     @PostMapping("/refresh_token")
     public TokenResponse refreshAccessToken(@RequestBody RefreshTokenRequest tokenRequest) {
         String username = tokenRequest.getUsername();
@@ -66,11 +66,10 @@ public class AuthController {
         return tokenResponse;
     }
 
-    //authorized
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
-        Long userId = SecurityUtilBean.getUserId();
+        Long userId = securityUtilBean.getUserId();
         refreshTokenRepository.deleteAllByUserId(userId);
         SecurityContextHolder.clearContext();
         return ResponseEntity.accepted().build();

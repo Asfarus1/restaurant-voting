@@ -36,9 +36,6 @@ public class UserFilter extends GenericFilterBean {
                     ((HttpServletResponse) response).sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-            } else if (url.contains("/lunches/")) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
-                return;
             }
         }
         chain.doFilter(request, response);

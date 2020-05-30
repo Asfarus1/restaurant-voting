@@ -16,10 +16,10 @@ public class RestaurantVotingApplication {
         SpringApplication.run(RestaurantVotingApplication.class, args);
     }
 
-    @Bean
-    @Scope("prototype")
-    LocalDateTime now() {
-        return LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0));
-//        return LocalDateTime.now();
-    }
+//    @Bean
+//    @Scope("prototype")
+//    LocalDateTime now() {
+//        return LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0));
+////        return LocalDateTime.now();
+//    }
 }

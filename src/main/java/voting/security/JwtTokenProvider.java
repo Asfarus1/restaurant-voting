@@ -40,6 +40,11 @@ public class JwtTokenProvider {
         return token.startsWith(TOKEN_PREFIX);
     }
 
+    /**
+     * @param token access token string
+     * @return username username from token
+     * @throws TokenAuthenticationException if not valid or expired
+     */
     public String validateAndGetUsername(String token) {
         return getClaims(token.substring(TOKEN_PREFIX.length())).getSubject();
     }

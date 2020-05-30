@@ -33,9 +33,7 @@ public class User extends BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Lunch> lunches;
 
     public User(String username, String password, Role... roles) {

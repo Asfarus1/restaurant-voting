@@ -8,7 +8,7 @@ import voting.domain.Role;
 import java.util.Optional;
 
 @Component
-public final class SecurityUtilBean {
+public class SecurityUtilBean {
 
     public Optional<AuthUser> getUser() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())

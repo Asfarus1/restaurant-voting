@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationConverter;
 import voting.domain.Role;
@@ -43,16 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth/refresh_token").permitAll()
-                .antMatchers("/account", "/auth/create_token", "/auth/logout").authenticated()
-                .antMatchers(HttpMethod.PUT, "restaurants/*/have-lunch").hasRole(user)
-                .antMatchers("/users", "/users/", "/lunches", "/lunches/**").hasRole(admin)
-                .antMatchers(HttpMethod.POST).hasRole(admin)
-                .antMatchers(HttpMethod.PUT).hasRole(admin)
-                .antMatchers(HttpMethod.PATCH).hasRole(admin)
+//                .antMatchers("/account", "/auth/create_token", "/auth/logout").authenticated()
+//                .antMatchers(HttpMethod.PUT, "restaurants/*/have-lunch").hasRole(user)
+                .antMatchers("/users", "/users/").hasRole(admin)
+//                .antMatchers(HttpMethod.POST).hasRole(admin)
+//                .antMatchers(HttpMethod.PUT).hasRole(admin)
+//                .antMatchers(HttpMethod.PATCH).hasRole(admin)
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(userFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(userFilter, FilterSecurityInterceptor.class);
     }
 
     @Bean
