@@ -6,10 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -37,6 +39,9 @@ class AuthControllerTest {
     private static final String USER_REFRESH_TOKEN = "0ba2a955-fc68-4f5d-87ad-688702ad7269";
     private static final String USER_ACCESS_TOKEN = "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwia" +
             "WF0IjoxNTkwNDM0MDAwLCJleHAiOjMzOTA0MzQwMDB9.o-JP6-t1wt_1k5gE_PzL9HKGCSSEMwgD4p3-gNp7T_4";
+
+    @Value("${spring.data.rest.base-path}")
+    protected String restRoot;
 
     @Autowired
     private MockMvc mockMvc;
@@ -86,11 +91,11 @@ class AuthControllerTest {
 
     @Test
     void accessUsingBasic() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get(restRoot))
+                .andExpect(status().isForbidden());
 
-        mockMvc.perform(get("/").with(httpBasic("user", "u")))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(restRoot).with(httpBasic("user", "u")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -98,10 +103,10 @@ class AuthControllerTest {
         when(tokenProvider.isSignedWith(USER_ACCESS_TOKEN)).thenReturn(true);
         when(tokenProvider.validateAndGetUsername(USER_ACCESS_TOKEN)).thenReturn("user");
 
-        mockMvc.perform(get("/"))
-                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get(restRoot))
+                .andExpect(status().is4xxClientError());
 
-        mockMvc.perform(get("/")
+        mockMvc.perform(get(restRoot)
                 .header(HttpHeaders.AUTHORIZATION, USER_ACCESS_TOKEN))
                 .andExpect(status().isOk());
     }

@@ -3,6 +3,7 @@ package voting.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -22,38 +23,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LunchApiTest {
+public class LunchApiTest extends AbstractRestApiPermissionsTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Override
+    protected Map<String, Object> getNewItem() {
+        return
+                Map.of("date", LocalDate.now(),
+                        "user", "/users/2",
+                        "restaurant", "/restaurants/42");
+    }
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Override
+    protected String getCollectionUrl(){
+        return "/lunches";
+    }
+
+    @Override
+    protected String getItemUrl(){
+        return "/lunches/110";
+    }
 
     //<user>
     @Test
     @WithMockUser
-    void userGetAll() throws Exception {
-        mockMvc.perform(get(getCollectionUrl()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaTypes.HAL_JSON))
-                .andExpect(content().string(containsString("page")));
-    }
-
-    @Test
-    @WithMockUser
-    void userGetOne() throws Exception {
-        mockMvc.perform(get(getItemUrl()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaTypes.HAL_JSON));
-    }
-
-    @Test
-    @WithMockUser
     void userPost() throws Exception {
-        mockMvc.perform(post(getCollectionUrl())
+        mockMvc.perform(post(restRoot +  getCollectionUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -63,7 +57,7 @@ public class LunchApiTest {
     @Test
     @WithMockUser
     void userPut() throws Exception {
-        mockMvc.perform(put(getItemUrl())
+        mockMvc.perform(put(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -73,7 +67,7 @@ public class LunchApiTest {
     @Test
     @WithMockUser
     void userDelete() throws Exception {
-        mockMvc.perform(delete(getItemUrl())
+        mockMvc.perform(delete(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isMethodNotAllowed());
@@ -82,29 +76,10 @@ public class LunchApiTest {
 
     //<admin>
     @Test
-    @WithMockUser(value = "admin", roles = "ADMIN")
-    void adminGetAll() throws Exception {
-        mockMvc.perform(get(getCollectionUrl()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaTypes.HAL_JSON))
-                .andExpect(content().string(containsString("page")));
-    }
-
-    @Test
-    @WithMockUser(value = "admin", roles = "ADMIN")
-    void adminGetOne() throws Exception {
-        mockMvc.perform(get(getItemUrl()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaTypes.HAL_JSON));
-    }
-
-    @Test
     @DirtiesContext
     @WithMockUser(value = "admin", roles = "ADMIN")
     void adminPost() throws Exception {
-        mockMvc.perform(post(getCollectionUrl())
+        mockMvc.perform(post(restRoot + getCollectionUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -114,7 +89,7 @@ public class LunchApiTest {
     @Test
     @WithMockUser(value = "admin", roles = "ADMIN")
     void adminPut() throws Exception {
-        mockMvc.perform(put(getItemUrl())
+        mockMvc.perform(put(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -124,25 +99,10 @@ public class LunchApiTest {
     @Test
     @WithMockUser(value = "admin", roles = "ADMIN")
     void adminDelete() throws Exception {
-        mockMvc.perform(delete(getItemUrl())
+        mockMvc.perform(delete(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isMethodNotAllowed());
     }
     //</admin>
-
-    private Map<String, Object> getNewItem() {
-        return
-                Map.of("date", LocalDate.now(),
-                        "user", "/users/2",
-                        "restaurant", "/restaurants/42");
-    }
-
-    private String getCollectionUrl(){
-        return "/lunches";
-    }
-
-    private String getItemUrl(){
-        return "/lunches/110";
-    }
 }

@@ -3,6 +3,7 @@ package voting.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -21,11 +22,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public abstract class AbstractRestApiPermissionsTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Value("${spring.data.rest.base-path}")
+    protected String restRoot;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    protected MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     protected abstract Object getNewItem();
 
@@ -37,7 +41,7 @@ public abstract class AbstractRestApiPermissionsTest {
     @Test
     @WithMockUser
     void userGetAll() throws Exception {
-        mockMvc.perform(get(getCollectionUrl()))
+        mockMvc.perform(get(restRoot + getCollectionUrl()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON))
@@ -47,7 +51,7 @@ public abstract class AbstractRestApiPermissionsTest {
     @Test
     @WithMockUser
     void userGetOne() throws Exception {
-        mockMvc.perform(get(getItemUrl()))
+        mockMvc.perform(get(restRoot + getItemUrl()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON));
@@ -56,7 +60,7 @@ public abstract class AbstractRestApiPermissionsTest {
     @Test
     @WithMockUser
     void userPost() throws Exception {
-        mockMvc.perform(post(getCollectionUrl())
+        mockMvc.perform(post(restRoot + getCollectionUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -66,7 +70,7 @@ public abstract class AbstractRestApiPermissionsTest {
     @Test
     @WithMockUser
     void userPut() throws Exception {
-        mockMvc.perform(put(getItemUrl())
+        mockMvc.perform(put(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -76,7 +80,7 @@ public abstract class AbstractRestApiPermissionsTest {
     @Test
     @WithMockUser
     void userDelete() throws Exception {
-        mockMvc.perform(delete(getItemUrl())
+        mockMvc.perform(delete(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isForbidden());
@@ -85,9 +89,9 @@ public abstract class AbstractRestApiPermissionsTest {
 
     //<admin>
     @Test
-    @WithMockUser(value = "admin", roles = "ADMIN")
+    @WithMockUser(value = "admin", authorities = "ADMIN")
     void adminGetAll() throws Exception {
-        mockMvc.perform(get(getCollectionUrl()))
+        mockMvc.perform(get(restRoot + getCollectionUrl()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON))
@@ -95,9 +99,9 @@ public abstract class AbstractRestApiPermissionsTest {
     }
 
     @Test
-    @WithMockUser(value = "admin", roles = "ADMIN")
+    @WithMockUser(value = "admin", authorities = "ADMIN")
     void adminGetOne() throws Exception {
-        mockMvc.perform(get(getItemUrl()))
+        mockMvc.perform(get(restRoot + getItemUrl()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON));
@@ -105,9 +109,9 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", roles = "ADMIN")
+    @WithMockUser(value = "admin", authorities = "ADMIN")
     void adminPost() throws Exception {
-        mockMvc.perform(post(getCollectionUrl())
+        mockMvc.perform(post(restRoot + getCollectionUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -116,9 +120,9 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", roles = "ADMIN")
+    @WithMockUser(value = "admin", authorities = "ADMIN")
     void adminPut() throws Exception {
-        mockMvc.perform(put(getItemUrl())
+        mockMvc.perform(put(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(getNewItem())))
                 .andDo(print())
@@ -127,9 +131,9 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", roles = "ADMIN")
+    @WithMockUser(value = "admin", authorities = "ADMIN")
     void adminDelete() throws Exception {
-        mockMvc.perform(delete(getItemUrl())
+        mockMvc.perform(delete(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent());

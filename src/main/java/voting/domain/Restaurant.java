@@ -1,8 +1,10 @@
 package voting.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -22,11 +24,10 @@ public class Restaurant extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant")
     private List<Menu> menus;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "restaurant")
     private List<Lunch> lunches;
 
     public Restaurant(String title) {

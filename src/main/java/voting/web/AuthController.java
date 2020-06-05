@@ -3,7 +3,6 @@ package voting.web;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +20,6 @@ import voting.security.TokenAuthenticationException;
 import voting.web.dto.RefreshTokenRequest;
 import voting.web.dto.TokenResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.UUID;
 
@@ -40,16 +38,16 @@ public class AuthController {
     @Value("${jwt.token.duration-millis}")
     private long accessTokenDurationMs;
 
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    //    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/create_token")
-    public TokenResponse getAccessToken(HttpServletRequest request) {
+    public TokenResponse getAccessToken() {
         AuthUser user = securityUtilBean.getUser().orElseThrow(() -> new BadCredentialsException("Unauthorized"));
         TokenResponse tokenResponse = getTokenResponse(user.getUsername());
         refreshTokenRepository.add(user.getId(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshExpired());
         return tokenResponse;
     }
 
-    @PreAuthorize("permitAll()")
+    //    @PreAuthorize("permitAll()")
     @PostMapping("/refresh_token")
     public TokenResponse refreshAccessToken(@RequestBody RefreshTokenRequest tokenRequest) {
         String username = tokenRequest.getUsername();
@@ -66,7 +64,7 @@ public class AuthController {
         return tokenResponse;
     }
 
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    //    @PreAuthorize("isAuthenticated()")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
         Long userId = securityUtilBean.getUserId();

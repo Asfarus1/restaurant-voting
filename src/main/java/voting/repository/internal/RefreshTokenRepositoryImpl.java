@@ -21,8 +21,8 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     @Override
     public boolean update(Long userId, String oldToken, String newToken, Date expired) {
         return template.update(
-                "UPDATE refresh_tokens SET token = ?3, expired=?4 WHERE user_id=?1 AND token=?2 AND expired>?5",
-                userId, oldToken, newToken, expired, new Date()) == 1;
+                "UPDATE refresh_tokens SET token = ?1, expired=?2 WHERE user_id=?3 AND token=?4 AND expired>?5",
+                newToken, expired, userId, oldToken, new Date()) == 1;
     }
 
     @Override

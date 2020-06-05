@@ -9,12 +9,10 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,26 +22,25 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class JwtTokenFilter extends GenericFilterBean {
+public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
     private final UserDetailsService userDetailsService;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        String authHeader = ((HttpServletRequest) request).getHeader(AUTHORIZATION);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        String authHeader = request.getHeader(AUTHORIZATION);
         if (authHeader != null && tokenProvider.isSignedWith(authHeader)) {
             try {
                 String username = tokenProvider.validateAndGetUsername(authHeader);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 SecurityContextHolder.setContext(new SecurityContextImpl(toAuthToken(userDetails)));
+
             } catch (AuthenticationException ex) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, ex.getLocalizedMessage());
-                return;
+                SecurityContextHolder.clearContext();
             }
         }
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     private UsernamePasswordAuthenticationToken toAuthToken(UserDetails userDetails) {

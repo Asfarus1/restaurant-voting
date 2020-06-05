@@ -16,7 +16,7 @@ import java.math.BigDecimal;
         uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_id"}))
 public class MenuItem extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dish_id", nullable = false)
     private Dish dish;
 
@@ -24,7 +24,7 @@ public class MenuItem extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 }

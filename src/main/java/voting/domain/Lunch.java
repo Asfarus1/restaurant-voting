@@ -1,7 +1,5 @@
 package voting.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,14 +16,14 @@ import java.time.LocalDate;
 @UniqueConstraint(columnNames = {"date", "user_id"}))
 public class Lunch extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, updatable = false)
     private User user;
 
     @Column(nullable = false, updatable = false)
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 }

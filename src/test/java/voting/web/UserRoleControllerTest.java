@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,6 +32,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserRoleControllerTest {
     public static final LocalDateTime BEFORE_AM_11 = LocalDateTime.parse("2020-05-05T10:00:00");
     public static final LocalDateTime AM_11 = LocalDateTime.parse("2020-05-05T11:00:00");
+
+    @Value("${spring.data.rest.base-path}")
+    protected String restRoot;
+
     @MockBean
     private LunchRepository lunchRepository;
 
@@ -49,11 +54,11 @@ class UserRoleControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "USER")
     void haveLunchBefore11() throws Exception {
         when(controller.now()).thenReturn(BEFORE_AM_11);
 
-        mockMvc.perform(put("/restaurants/44/have-lunch"))
+        mockMvc.perform(put(restRoot + "/restaurants/44/have-lunch"))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
@@ -62,11 +67,11 @@ class UserRoleControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "USER")
     void haveLunchAfter11() throws Exception {
         when(controller.now()).thenReturn(AM_11);
 
-        mockMvc.perform(put("/restaurants/44/have-lunch"))
+        mockMvc.perform(put(restRoot + "/restaurants/44/have-lunch"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
@@ -77,13 +82,13 @@ class UserRoleControllerTest {
     @Test
     @WithMockUser
     void forwardCurrentUser() throws Exception {
-        mockMvc.perform(get("/account"))
-                .andExpect(forwardedUrl("/users/2/"));
+        mockMvc.perform(get(restRoot + "/account"))
+                .andExpect(forwardedUrl(restRoot + "/users/2/"));
 
-        mockMvc.perform(get("/account/"))
-                .andExpect(forwardedUrl("/users/2/"));
+        mockMvc.perform(get(restRoot + "/account/"))
+                .andExpect(forwardedUrl(restRoot + "/users/2/"));
 
-        mockMvc.perform(get("/account/lunches"))
-                .andExpect(forwardedUrl("/users/2/lunches"));
+        mockMvc.perform(get(restRoot + "/account/lunches"))
+                .andExpect(forwardedUrl(restRoot + "/users/2/lunches"));
     }
 }

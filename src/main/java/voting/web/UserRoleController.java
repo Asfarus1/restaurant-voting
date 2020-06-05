@@ -1,7 +1,6 @@
 package voting.web;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import voting.repository.LunchRepository;
 import voting.security.SecurityUtilBean;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,14 +22,15 @@ import static org.springframework.http.ResponseEntity.accepted;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/rest-api")
 public class UserRoleController {
     private final LunchRepository repository;
     private final SecurityUtilBean securityUtilBean;
 
-
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping(value = "/restaurants/{restaurantId}/have-lunch")
-    public ResponseEntity<?> haveLunch(@PathVariable Long restaurantId) { Long userId = securityUtilBean.getUserId();
+    public ResponseEntity<?> haveLunch(@PathVariable Long restaurantId) {
+        Long userId = securityUtilBean.getUserId();
         System.out.println("have-lunch:" + userId);
         LocalDateTime now = now();
         if (now.getHour() > 10) {
@@ -42,15 +42,15 @@ public class UserRoleController {
         return accepted().build();
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping({"/account","/account/**"})
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping({"/account", "/account/**"})
     public String forwardCurrentUser(HttpServletRequest request) {
         String uri = request.getRequestURI();
         return format("forward:{0}",
                 uri.replaceAll("/account[/]?", format("/users/{0}/", securityUtilBean.getUserId())));
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping({"/today-menus"})
     public String forwardTodayMenus(Pageable pageable, HttpServletRequest request) {
         request.setAttribute("date", LocalDate.now());
@@ -61,7 +61,7 @@ public class UserRoleController {
         return format("/menus/search/date");
     }
 
-    protected LocalDateTime now(){
+    protected LocalDateTime now() {
         return LocalDateTime.now();
     }
 }
