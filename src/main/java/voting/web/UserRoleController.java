@@ -27,7 +27,7 @@ public class UserRoleController {
     private final LunchRepository repository;
     private final SecurityUtilBean securityUtilBean;
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping(value = "/restaurants/{restaurantId}/have-lunch")
     public ResponseEntity<?> haveLunch(@PathVariable Long restaurantId) {
         Long userId = securityUtilBean.getUserId();

@@ -1,6 +1,7 @@
 package voting.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 //Variant with menu instead date and restaurant hasn't simple table unique constrains
 @Table(name = "lunches", uniqueConstraints =
 @UniqueConstraint(columnNames = {"date", "user_id"}))
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "non-lazy")
 public class Lunch extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

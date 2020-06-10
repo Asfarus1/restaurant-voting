@@ -3,9 +3,9 @@ VALUES ('admin', '{noop}a'),
        ('user', '{noop}u');
 
 INSERT INTO user_roles (user_id, role)
-VALUES (1, 'ADMIN'),
-       (1, 'USER'),
-       (2, 'USER');
+VALUES (1, 'ROLE_ADMIN'),
+       (1, 'ROLE_USER'),
+       (2, 'ROLE_USER');
 
 INSERT INTO dishes (title)
 VALUES ('Hard Tacos or Tostadas'),

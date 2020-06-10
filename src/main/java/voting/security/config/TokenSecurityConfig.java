@@ -18,9 +18,6 @@ public class TokenSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .logout().disable()
                 .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(STATELESS)
-                .and().authorizeRequests()
-                .antMatchers("/auth/refresh_token").permitAll()
-                .antMatchers("/auth/create_token", "/auth/logout").authenticated();
+                .sessionManagement().sessionCreationPolicy(STATELESS);
     }
 }

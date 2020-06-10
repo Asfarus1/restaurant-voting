@@ -54,7 +54,7 @@ class UserRoleControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser
     void haveLunchBefore11() throws Exception {
         when(controller.now()).thenReturn(BEFORE_AM_11);
 
@@ -67,7 +67,7 @@ class UserRoleControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser
     void haveLunchAfter11() throws Exception {
         when(controller.now()).thenReturn(AM_11);
 

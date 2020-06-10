@@ -3,23 +3,28 @@ package voting.web;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import voting.domain.Role;
 import voting.domain.User;
 import voting.repository.RefreshTokenRepository;
 import voting.repository.UserRepository;
 import voting.security.AuthUser;
 import voting.security.JwtTokenProvider;
 import voting.security.SecurityUtilBean;
-import voting.security.TokenAuthenticationException;
+import voting.security.exceptions.TokenAuthenticationException;
 import voting.web.dto.RefreshTokenRequest;
+import voting.web.dto.SignUpRequest;
 import voting.web.dto.TokenResponse;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,6 +36,7 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final SecurityUtilBean securityUtilBean;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${refresh-token.duration-millis}")
     private long refreshTokenDurationMs;
@@ -38,7 +44,7 @@ public class AuthController {
     @Value("${jwt.token.duration-millis}")
     private long accessTokenDurationMs;
 
-    //    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create_token")
     public TokenResponse getAccessToken() {
         AuthUser user = securityUtilBean.getUser().orElseThrow(() -> new BadCredentialsException("Unauthorized"));
@@ -47,9 +53,9 @@ public class AuthController {
         return tokenResponse;
     }
 
-    //    @PreAuthorize("permitAll()")
+    @PreAuthorize("permitAll()")
     @PostMapping("/refresh_token")
-    public TokenResponse refreshAccessToken(@RequestBody RefreshTokenRequest tokenRequest) {
+    public TokenResponse refreshAccessToken(@Valid @RequestBody RefreshTokenRequest tokenRequest) {
         String username = tokenRequest.getUsername();
         Long userId = repository.findByUsername(username)
                 .map(User::getId)
@@ -64,7 +70,18 @@ public class AuthController {
         return tokenResponse;
     }
 
-    //    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
+    @PostMapping("/sign_up")
+    public TokenResponse signUp(@Valid @RequestBody SignUpRequest userRequest) {
+        String password = passwordEncoder.encode(userRequest.getPassword());
+        User user = new User(userRequest.getName(), password, Role.ROLE_USER);
+        repository.save(user);
+        TokenResponse tokenResponse = getTokenResponse(user.getUsername());
+        refreshTokenRepository.add(user.getId(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshExpired());
+        return tokenResponse;
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
         Long userId = securityUtilBean.getUserId();

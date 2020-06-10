@@ -18,6 +18,6 @@ public class H2SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .headers().frameOptions().disable()
                 .and().authorizeRequests()
-                .antMatchers("/h2-console/**").hasAuthority("ADMIN");
+                .antMatchers("/h2-console/**").hasRole("ADMIN");
     }
 }

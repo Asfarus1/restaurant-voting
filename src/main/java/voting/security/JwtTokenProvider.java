@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import voting.security.exceptions.TokenAuthenticationException;
 
 import java.util.Base64;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenProvider {
 
-    public static final String TOKEN_PREFIX = "Bearer_";
+    public static final String TOKEN_PREFIX = "Bearer ";
     private final long jwtTokenDurationMs;
     private final String secret;
 

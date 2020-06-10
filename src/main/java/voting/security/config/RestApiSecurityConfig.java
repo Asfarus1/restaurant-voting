@@ -7,9 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import voting.domain.Role;
-import voting.security.JwtTokenFilter;
-import voting.security.UserFilter;
+import voting.security.filters.JwtTokenFilter;
+import voting.security.filters.UserFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -23,8 +22,6 @@ public class RestApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String admin = Role.ADMIN.getAuthority();
-        String user = Role.USER.getAuthority();
         http
                 .antMatcher("/rest-api/**")
                 .sessionManagement().sessionCreationPolicy(STATELESS)
@@ -32,7 +29,7 @@ public class RestApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(userFilter, FilterSecurityInterceptor.class)
                 .authorizeRequests()
-                .antMatchers("/rest-api/users", "/rest-api/users/").hasAuthority(admin)
+                .antMatchers("/rest-api/users", "/rest-api/users/").hasRole("ADMIN")
                 .anyRequest().authenticated();
     }
 }

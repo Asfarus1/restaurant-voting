@@ -5,9 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class RefreshTokenRequest {
+public class SignUpRequest {
     @NotEmpty
-    private String refreshToken;
+    private String name;
     @NotEmpty
-    private String username;
+    private String password;
 }

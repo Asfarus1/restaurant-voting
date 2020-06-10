@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import voting.domain.Role;
+import voting.security.exceptions.TokenAuthenticationException;
 
 import java.util.Optional;
 

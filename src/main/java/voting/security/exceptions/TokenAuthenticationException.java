@@ -1,4 +1,4 @@
-package voting.security;
+package voting.security.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

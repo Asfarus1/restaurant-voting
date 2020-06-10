@@ -89,7 +89,7 @@ public abstract class AbstractRestApiPermissionsTest {
 
     //<admin>
     @Test
-    @WithMockUser(value = "admin", authorities = "ADMIN")
+    @WithMockUser(value = "admin", roles = "ADMIN")
     void adminGetAll() throws Exception {
         mockMvc.perform(get(restRoot + getCollectionUrl()))
                 .andDo(print())
@@ -99,7 +99,7 @@ public abstract class AbstractRestApiPermissionsTest {
     }
 
     @Test
-    @WithMockUser(value = "admin", authorities = "ADMIN")
+    @WithMockUser(value = "admin", roles = "ADMIN")
     void adminGetOne() throws Exception {
         mockMvc.perform(get(restRoot + getItemUrl()))
                 .andDo(print())
@@ -109,7 +109,7 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", authorities = "ADMIN")
+    @WithMockUser(value = "admin", roles = "ADMIN")
     void adminPost() throws Exception {
         mockMvc.perform(post(restRoot + getCollectionUrl())
                 .contentType(APPLICATION_JSON)
@@ -120,7 +120,7 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", authorities = "ADMIN")
+    @WithMockUser(value = "admin", roles = "ADMIN")
     void adminPut() throws Exception {
         mockMvc.perform(put(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON)
@@ -131,7 +131,7 @@ public abstract class AbstractRestApiPermissionsTest {
 
     @Test
     @DirtiesContext
-    @WithMockUser(value = "admin", authorities = "ADMIN")
+    @WithMockUser(value = "admin", roles = "ADMIN")
     void adminDelete() throws Exception {
         mockMvc.perform(delete(restRoot + getItemUrl())
                 .contentType(APPLICATION_JSON))

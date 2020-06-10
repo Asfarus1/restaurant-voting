@@ -10,18 +10,18 @@ import voting.domain.BaseEntity;
 public interface AuthoriseUpdatePagingRepository<T extends BaseEntity> extends PagingAndSortingRepository<T, Long> {
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     <S extends T> S save(S entity);
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     void delete(T entity);
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     void deleteAll();
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     void deleteById(Long aLong);
 }

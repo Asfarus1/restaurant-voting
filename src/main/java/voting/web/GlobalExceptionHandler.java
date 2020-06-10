@@ -1,11 +1,11 @@
-package voting.web.exceptions;
+package voting.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import voting.security.TokenAuthenticationException;
+import voting.security.exceptions.TokenAuthenticationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

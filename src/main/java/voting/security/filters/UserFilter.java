@@ -1,9 +1,10 @@
-package voting.security;
+package voting.security.filters;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import voting.domain.Role;
+import voting.security.SecurityUtilBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,7 +24,7 @@ public class UserFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("UserFilter:" + securityUtilBean.getUser().orElse(null));
-        if (!securityUtilBean.hasRole(Role.ADMIN)) {
+        if (!securityUtilBean.hasRole(Role.ROLE_ADMIN)) {
             String url = request.getRequestURL().toString();
             Optional<Long> requestedUserId = Optional.of(USER_ID_PATTERN.matcher(url))
                     .filter(Matcher::find)
