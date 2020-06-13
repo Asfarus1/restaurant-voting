@@ -11,6 +11,9 @@ import java.util.Optional;
 @Component
 public class SecurityUtilBean {
 
+    /**
+     * @return authenticated user
+     */
     public Optional<AuthUser> getUser() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(Authentication::getPrincipal)
@@ -26,11 +29,11 @@ public class SecurityUtilBean {
     }
 
     /**
-     * @return authorized user id
-     * @throws TokenAuthenticationException if user is not authorized
+     * @return authenticated user id
+     * @throws TokenAuthenticationException if user is not authenticated
      */
     public Long getUserId() {
         return getUser().map(AuthUser::getId)
-                .orElseThrow(() -> new TokenAuthenticationException("Not authorized"));
+                .orElseThrow(() -> new TokenAuthenticationException("Not authenticated"));
     }
 }

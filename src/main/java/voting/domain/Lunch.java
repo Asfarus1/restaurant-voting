@@ -2,6 +2,7 @@ package voting.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,8 +16,6 @@ import java.time.LocalDate;
 //Variant with menu instead date and restaurant hasn't simple table unique constrains
 @Table(name = "lunches", uniqueConstraints =
 @UniqueConstraint(columnNames = {"date", "user_id"}))
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "non-lazy")
 public class Lunch extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,6 +23,7 @@ public class Lunch extends BaseEntity {
     private User user;
 
     @Column(nullable = false, updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)

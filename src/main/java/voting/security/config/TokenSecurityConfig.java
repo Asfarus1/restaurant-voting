@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@Order(1)
+@Order(TokenSecurityConfig.ORDER)
 public class TokenSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final int ORDER = 1;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

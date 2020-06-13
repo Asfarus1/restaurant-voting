@@ -30,8 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 class UserRoleControllerTest {
-    public static final LocalDateTime BEFORE_AM_11 = LocalDateTime.parse("2020-05-05T10:00:00");
-    public static final LocalDateTime AM_11 = LocalDateTime.parse("2020-05-05T11:00:00");
+    public static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.parse("2020-05-05T00:00:00");
+
+    @Value("${end-hour-for-choose-lunch}")
+    private int endHourForChooseLunch;
 
     @Value("${spring.data.rest.base-path}")
     protected String restRoot;
@@ -56,20 +58,22 @@ class UserRoleControllerTest {
     @Test
     @WithMockUser
     void haveLunchBefore11() throws Exception {
-        when(controller.now()).thenReturn(BEFORE_AM_11);
+        LocalDateTime beforeEndTime = LOCAL_DATE_TIME.plusHours(endHourForChooseLunch - 1);
+        when(controller.now()).thenReturn(beforeEndTime);
 
         mockMvc.perform(put(restRoot + "/restaurants/44/have-lunch"))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
         Mockito.verify(lunchRepository, Mockito.times(1))
-                .haveLunchIn(44L, BEFORE_AM_11.toLocalDate(), 2L);
+                .haveLunchIn(44L, LOCAL_DATE_TIME.toLocalDate(), 2L);
     }
 
     @Test
     @WithMockUser
     void haveLunchAfter11() throws Exception {
-        when(controller.now()).thenReturn(AM_11);
+        LocalDateTime endTime = LOCAL_DATE_TIME.plusHours(endHourForChooseLunch);
+        when(controller.now()).thenReturn(endTime);
 
         mockMvc.perform(put(restRoot + "/restaurants/44/have-lunch"))
                 .andDo(print())

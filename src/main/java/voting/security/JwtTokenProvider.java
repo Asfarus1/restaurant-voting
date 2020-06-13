@@ -17,6 +17,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     public static final String TOKEN_PREFIX = "Bearer ";
+
     private final long jwtTokenDurationMs;
     private final String secret;
 
@@ -27,6 +28,7 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(String username) {
+        log.debug("validateAndGetUsername({})", username);
         Date now = new Date();
         String token = Jwts.builder()
                 .setSubject(username)
@@ -47,6 +49,7 @@ public class JwtTokenProvider {
      * @throws TokenAuthenticationException if not valid or expired
      */
     public String validateAndGetUsername(String token) {
+        log.debug("validateAndGetUsername({})", token);
         return getClaims(token.substring(TOKEN_PREFIX.length())).getSubject();
     }
 
@@ -54,7 +57,7 @@ public class JwtTokenProvider {
         try {
             return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         } catch (JwtException | IllegalArgumentException e) {
-            log.warn("Token " + token + " token is expired or invalid", e);
+            log.debug("Token {} token is expired or invalid: {}", token, e.getLocalizedMessage());
             throw new TokenAuthenticationException("JWT token is expired or invalid");
         }
     }

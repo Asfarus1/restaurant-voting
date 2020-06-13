@@ -3,6 +3,7 @@ package voting.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 @ToString(exclude = "menu")
 @Table(name = "menu_items",
         uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_id"}))
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "menus")
 public class MenuItem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

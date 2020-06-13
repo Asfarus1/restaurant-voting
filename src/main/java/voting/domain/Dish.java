@@ -11,10 +11,8 @@ import javax.persistence.*;
 @Entity(name = "dishes")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "title"))
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
 public class Dish extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 }

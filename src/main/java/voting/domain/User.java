@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Set;
 @ToString(exclude = "lunches")
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 @NoArgsConstructor
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends BaseEntity {
     private String username;
 
@@ -30,6 +32,7 @@ public class User extends BaseEntity {
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")

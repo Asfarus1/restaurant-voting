@@ -12,14 +12,17 @@ CREATE SEQUENCE hibernate_sequence;
 
 CREATE TABLE dishes
 (
-    id    BIGINT       NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
-    title VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    id      BIGINT       NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated TIMESTAMP             DEFAULT NOW(),
+    title   VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (title)
 );
 
 CREATE TABLE users
 (
     id       BIGINT       NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated  TIMESTAMP             DEFAULT NOW(),
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     enabled  boolean      NOT NULL DEFAULT TRUE,
@@ -37,14 +40,17 @@ CREATE TABLE user_roles
 
 CREATE TABLE restaurants
 (
-    id    BIGINT       NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
-    title VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    id      BIGINT       NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated TIMESTAMP             DEFAULT NOW(),
+    title   VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (title)
 );
 
 CREATE TABLE menu
 (
     id            BIGINT NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated       TIMESTAMP       DEFAULT NOW(),
     date          DATE   NOT NULL,
     restaurant_id BIGINT NOT NULL,
     PRIMARY KEY (id),
@@ -55,6 +61,7 @@ CREATE TABLE menu
 CREATE TABLE menu_items
 (
     id      BIGINT         NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated TIMESTAMP               DEFAULT NOW(),
     menu_id BIGINT         NOT NULL,
     dish_id BIGINT         NOT NULL,
     price   decimal(19, 2) NOT NULL,
@@ -67,6 +74,7 @@ CREATE TABLE menu_items
 CREATE TABLE lunches
 (
     id            BIGINT NOT NULL DEFAULT NEXTVAL('hibernate_sequence'),
+    updated       TIMESTAMP       DEFAULT NOW(),
     date          date   NOT NULL,
     user_id       BIGINT NOT NULL,
     restaurant_id BIGINT NOT NULL,

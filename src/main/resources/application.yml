@@ -1,0 +1,51 @@
+end-hour-for-choose-lunch: 11
+spring:
+  h2:
+    console:
+      enabled: "true"
+  datasource:
+    url: jdbc:h2:mem:voting
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: "true"
+        format_sql: "true"
+        use_sql_comments: "true"
+        dialect: org.hibernate.dialect.H2Dialect
+        order_inserts: "true"
+        generate_statistics: "true"
+        cache:
+          region:
+            use_second_level_cache: "true"
+            factory_class: "org.hibernate.cache.jcache.JCacheRegionFactory"
+            provider: "org.ehcache.jsr107.EhcacheCachingProvider"
+          use_query_cache: "true"
+  http:
+    encoding:
+      force: "true"
+  data:
+    rest:
+      return-body-on-create: "true"
+      return-body-on-update: "true"
+      base-path: /rest-api
+logging:
+  level:
+    org:
+      hibernate:
+        cache: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+jwt:
+  token:
+    duration-millis: "1800000000"
+    secret: secret
+refresh-token:
+  duration-millis: "31536000000"

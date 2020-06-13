@@ -23,7 +23,6 @@ public class UserFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("UserFilter:" + securityUtilBean.getUser().orElse(null));
         if (!securityUtilBean.hasRole(Role.ROLE_ADMIN)) {
             String url = request.getRequestURL().toString();
             Optional<Long> requestedUserId = Optional.of(USER_ID_PATTERN.matcher(url))

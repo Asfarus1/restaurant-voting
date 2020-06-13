@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -28,6 +29,7 @@ import java.util.List;
 @NamedEntityGraph(name = Menu.WITH_ITEMS,
         attributeNodes = @NamedAttributeNode("items"),
         subgraphs = @NamedSubgraph(name = "items", attributeNodes = @NamedAttributeNode("dish")))
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "menus")
 public class Menu extends BaseEntity {
 
     public static final String BY_DATE_AND_RESTAURANT = "Menu.getByDateAndRestaurant";
@@ -45,5 +47,6 @@ public class Menu extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
     @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
     private List<MenuItem> items;
 }

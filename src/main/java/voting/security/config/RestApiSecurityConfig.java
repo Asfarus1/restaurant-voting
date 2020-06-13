@@ -13,9 +13,11 @@ import voting.security.filters.UserFilter;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@Order(2)
+@Order(RestApiSecurityConfig.ORDER)
 @RequiredArgsConstructor
 public class RestApiSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final int ORDER = TokenSecurityConfig.ORDER + 1;
 
     private final JwtTokenFilter jwtTokenFilter;
     private final UserFilter userFilter;

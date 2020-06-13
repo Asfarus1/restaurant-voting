@@ -6,8 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@Order(3)
+@Order(H2SecurityConfig.ORDER)
 public class H2SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final int ORDER = RestApiSecurityConfig.ORDER + 1;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
