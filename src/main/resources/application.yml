@@ -20,10 +20,9 @@ spring:
         order_inserts: "true"
         generate_statistics: "true"
         cache:
-          region:
-            use_second_level_cache: "true"
-            factory_class: "org.hibernate.cache.jcache.JCacheRegionFactory"
-            provider: "org.ehcache.jsr107.EhcacheCachingProvider"
+          use_second_level_cache: "true"
+          factory_class: "org.hibernate.cache.jcache.JCacheRegionFactory"
+          provider: "org.ehcache.jsr107.EhcacheCachingProvider"
           use_query_cache: "true"
   http:
     encoding:
