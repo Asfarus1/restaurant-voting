@@ -65,7 +65,7 @@ class AuthControllerTest {
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "authService")
     void getAccessToken() throws Exception {
-        checkToken(mockMvc.perform(post("/auth/create_token")));
+        checkToken(mockMvc.perform(post("/auth/create-token")));
         verify(refreshTokenRepository, times(1))
                 .add(eq(TestData.USER_ID), anyString(), any(Date.class));
     }
@@ -77,7 +77,7 @@ class AuthControllerTest {
                 .thenReturn(true);
 
         String body = objectMapper.writeValueAsString(getRefreshTokenRequest());
-        checkToken(mockMvc.perform(post("/auth/refresh_token")
+        checkToken(mockMvc.perform(post("/auth/refresh-token")
                 .contentType(APPLICATION_JSON)
                 .content(body)));
 
@@ -136,13 +136,13 @@ class AuthControllerTest {
         signUpRequest.setName(username);
         signUpRequest.setPassword(password);
 
-        checkToken(mockMvc.perform(post("/auth/sign_up")
+        checkToken(mockMvc.perform(post("/auth/sign-up")
                 .content(objectMapper.writeValueAsString(signUpRequest))
                 .contentType(APPLICATION_JSON)));
 
         Assertions.assertThat(userRepository.findByUsername(username)).isNotEmpty();
 
-        mockMvc.perform(post("/auth/create_token")
+        mockMvc.perform(post("/auth/create-token")
                 .with(httpBasic(username, password)))
                 .andExpect(status().isOk());
     }

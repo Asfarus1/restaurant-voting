@@ -13,6 +13,7 @@ public class MenuCustomSaveRepositoryImpl implements MenuCustomSaveRepository {
     private EntityManager em;
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends Menu> S save(S menu) {
         TypedQuery<Menu> query = em.createNamedQuery(Menu.BY_DATE_AND_RESTAURANT, Menu.class)
                 .setParameter(1, menu.getDate())
