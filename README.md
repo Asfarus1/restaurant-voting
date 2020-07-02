@@ -26,6 +26,7 @@ TOKEN AUTHENTICATION SERVICE:
 Returns access and refresh tokens by basic auth
 
 request: curl -X POST -H 'Authorization: Basic dXNlcjp1' http://localhost:8080/auth/create-token
+
 response: {
     "accessToken":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNTkzNjA1ODI0LCJleHAiOjE1OTU0MDU4MjR9.bMglz8XwrVrufsvsL8bb0BRFlUnfcI0v0w8fS0pTyoQ",
     "refreshToken":"aa4fbcce-b2a9-4c7d-9a75-4bc403e9c7bb",
@@ -37,6 +38,7 @@ response: {
 Returns access and refresh tokens by refresh token
 
 request: curl -X POST -H 'Content-Type: application/json' -d '{"username":"user","refreshToken":"aa4fbcce-b2a9-4c7d-9a75-4bc403e9c7bb"}' http://localhost:8080/auth/refresh-token
+
 response: {
     "accessToken":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNTkzNjEwODQwLCJleHAiOjE1OTU0MTA4NDB9.CN0ScnbDyOh8oxJNmktJL2dunk7sDefemUKHoK52JwM",
     "refreshToken":"984f71a3-ab9f-4fb5-8a03-838d7e6dd8ab",
@@ -49,6 +51,7 @@ response: {
 Creates new user and returns access and refresh tokens
 
 request: curl -X POST -H 'Content-Type: application/json' -d '{"name":"new_user","password":"123"}' http://localhost:8080/auth/sign-up
+
 response: {
     "accessToken":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdfdXNlciIsImlhdCI6MTU5MzYxMTgxMCwiZXhwIjoxNTk1NDExODEwfQ.TI81hUdl0HspUKLaA43ZkHcuxr8OORT1k7BvSVqqsis",
     "refreshToken":"b4f9aa57-8a2b-49c1-a971-044a8e433ebc",
@@ -66,6 +69,7 @@ response status: 202
 REST API:
 description:
 http://localhost:8080/rest-api
+
 example: curl -H 'Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNTkzNjA1ODI0LCJleHAiOjE1OTU0MDU4MjR9.bMglz8XwrVrufsvsL8bb0BRFlUnfcI0v0w8fS0pTyoQ' http://localhost:8080/rest-api
 
 ====
