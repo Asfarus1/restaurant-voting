@@ -1,3 +1,6 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5a3af588cdc64de4805689e13556d138)](https://app.codacy.com/manual/Asfarus1/restaurant-voting?utm_source=github.com&utm_medium=referral&utm_content=Asfarus1/restaurant-voting&utm_campaign=Badge_Grade_Dashboard)
+[![Build Status](https://travis-ci.com/Asfarus1/restaurant-voting.svg?branch=master)](https://travis-ci.com/Asfarus1/restaurant-voting)
+
 REST API using Hibernate/jjwt/Spring-Boot without frontend.
 
 The task is:
