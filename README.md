@@ -23,6 +23,9 @@ Default users for testing api:
 TOKEN AUTHENTICATION SERVICE:
   
 ===
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5a3af588cdc64de4805689e13556d138)](https://app.codacy.com/manual/Asfarus1/restaurant-voting?utm_source=github.com&utm_medium=referral&utm_content=Asfarus1/restaurant-voting&utm_campaign=Badge_Grade_Dashboard)
+
 Returns access and refresh tokens by basic auth
 
 request: curl -X POST -H 'Authorization: Basic dXNlcjp1' http://localhost:8080/auth/create-token
