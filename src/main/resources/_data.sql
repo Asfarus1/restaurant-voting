@@ -1,6 +1,6 @@
-INSERT INTO users (username, password)
-VALUES ('admin', '{noop}a'),
-       ('user', '{noop}u');
+-- INSERT INTO users (username, password)
+-- VALUES ('admin', '{noop}a'),
+--        ('user', '{noop}u');
 
 INSERT INTO user_roles (user_id, role)
 VALUES (1, 'ROLE_ADMIN'),

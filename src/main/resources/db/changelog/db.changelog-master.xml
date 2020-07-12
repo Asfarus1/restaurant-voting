@@ -10,7 +10,7 @@
     </preConditions>
 
     <changeSet id="1" author="asfarus">
-        <createSequence sequenceName="hibernate_sequence" incrementBy="1" />
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1"  startValue="3"/>
 
         <createTable tableName="dishes">
             <column name="id" type="BIGINT" defaultValueComputed="hibernate_sequence.NEXTVAL">
@@ -168,5 +168,27 @@
             </column>
         </createTable>
         <addUniqueConstraint tableName="refresh_tokens" columnNames="user_id,token"/>
+    </changeSet>
+
+    <changeSet id="3" author="asfarus">
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="a"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="username" value="user"/>
+            <column name="password" value="u"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="4" author="asfarus">
+        <sqlFile  dbms="h2"
+                  encoding="UTF-8"
+                  endDelimiter="\nGO"
+                  path="_data.sql"
+                  splitStatements="true"
+                  stripComments="true"/>
     </changeSet>
 </databaseChangeLog>
