@@ -2,7 +2,7 @@ end-hour-for-choose-lunch: 11
 spring:
   h2:
     console:
-      enabled: "true"
+      enabled: true
   datasource:
     url: jdbc:h2:mem:voting
     driverClassName: org.h2.Driver
@@ -13,24 +13,26 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        show_sql: "true"
-        format_sql: "true"
-        use_sql_comments: "true"
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
         dialect: org.hibernate.dialect.H2Dialect
-        order_inserts: "true"
-        generate_statistics: "true"
+        order_inserts: true
+        generate_statistics: true
         cache:
-          use_second_level_cache: "true"
-          factory_class: "org.hibernate.cache.jcache.JCacheRegionFactory"
-          provider: "org.ehcache.jsr107.EhcacheCachingProvider"
-          use_query_cache: "true"
+          use_second_level_cache: true
+          factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+          provider: org.ehcache.jsr107.EhcacheCachingProvider
+          use_query_cache: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
   http:
     encoding:
-      force: "true"
+      force: true
   data:
     rest:
-      return-body-on-create: "true"
-      return-body-on-update: "true"
+      return-body-on-create: true
+      return-body-on-update: true
       base-path: /rest-api
 logging:
   level:
@@ -44,7 +46,7 @@ logging:
 
 jwt:
   token:
-    duration-millis: "1800000000"
+    duration-millis: 1800000000
     secret: secret
 refresh-token:
-  duration-millis: "31536000000"
+  duration-millis: 31536000000
