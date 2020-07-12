@@ -33,6 +33,12 @@ public class UserRoleController {
     @Value("${end-hour-for-choose-lunch}")
     private int EndHourForChooseLunch;
 
+    /**
+     * Select restaurant for lunch today.
+     * Available before 11 am.
+     * @param restaurantId selected restaurant id
+     * @return accepted or forbidden
+     */
     @PreAuthorize("hasRole('USER')")
     @PutMapping(value = "/restaurants/{restaurantId}/have-lunch")
     public ResponseEntity<?> haveLunch(@PathVariable Long restaurantId) {
@@ -58,6 +64,11 @@ public class UserRoleController {
         return accepted().build();
     }
 
+    /**
+     * Redirect to same url with replacement for current user
+     * @param request http request
+     * @return redirect to same url with replacement for current user
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping({"/account", "/account/**"})
     public String forwardCurrentUser(HttpServletRequest request) {
@@ -73,6 +84,11 @@ public class UserRoleController {
         return forward;
     }
 
+    /**
+     * Returns pageable list of today menus in different restaurants
+     * @param pageable standard page parameters (page, sort, size)
+     * @return list of today menus in different restaurants
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping({"/today-menus"})
     public String forwardTodayMenus(Pageable pageable) {
@@ -87,6 +103,7 @@ public class UserRoleController {
         return forward;
     }
 
+    //to replace in test
     protected LocalDateTime now() {
         return LocalDateTime.now();
     }

@@ -52,7 +52,7 @@ public class AuthController {
      * @return access and refresh tokens
      */
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create_token")
+    @PostMapping("/create-token")
     public TokenResponse getAccessToken() {
         AuthUser user = securityUtilBean.getUser().orElseThrow(() -> new BadCredentialsException("Unauthorized"));
         log.debug("getAccessToken() for user: {})", user.getUsername());
@@ -66,7 +66,7 @@ public class AuthController {
      * @return access and refresh tokens
      */
     @PreAuthorize("permitAll()")
-    @PostMapping("/refresh_token")
+    @PostMapping("/refresh-token")
     public TokenResponse refreshAccessToken(@Valid @RequestBody RefreshTokenRequest tokenRequest) {
         log.debug("refreshAccessToken({})", tokenRequest);
         String username = tokenRequest.getUsername();
@@ -88,7 +88,7 @@ public class AuthController {
      * @return access and refresh tokens
      */
     @PreAuthorize("permitAll()")
-    @PostMapping("/sign_up")
+    @PostMapping("/sign-up")
     public TokenResponse signUp(@Valid @RequestBody SignUpRequest userRequest) {
         log.debug("signUp user: {}", userRequest.getName());
         String password = passwordEncoder.encode(userRequest.getPassword());
@@ -100,7 +100,7 @@ public class AuthController {
     }
 
     /**
-     * Removes all refresh tokens by user
+     * Removes all refresh tokens for user
      * @return 202 status
      */
     @PreAuthorize("isAuthenticated()")
